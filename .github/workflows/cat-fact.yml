@@ -9,20 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Get cat fact
-      id: fact
-      run: |
-        FACT=$(curl -s https://cat-fact.herokuapp.com/facts/random | jq -r '.text')
-        echo "::set-output name=fact::$FACT"
+      - name: Get cat fact
+        id: fact
+        run: |
+          FACT=$(curl -s https://cat-fact.herokuapp.com/facts/random | jq -r '.text')
+          echo "::set-output name=fact::$FACT"
 
-    - name: Comment on issue
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const fact = `Did you know? Here's a cat fact for you: "${{ steps.fact.outputs.fact }}" 🐱`;
-          const comment = context.issue({ body: fact });
-          return github.issues.createComment(comment);
+      - name: Comment on issue
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const fact = `Did you know? Here's a cat fact for you: "${{ steps.fact.outputs.fact }}" 🐱`;
+            const comment = { issue_number: context.issue.number, body: fact };
+            return github.issues.createComment({ ...context.repo, ...comment });
