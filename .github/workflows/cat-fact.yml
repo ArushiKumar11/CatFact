@@ -3,8 +3,8 @@ name: Cat Facts
 on:
   issues:
     types: [opened]
-    
-permissions: read-all|write-all    
+
+  
 
 jobs:
   cat_fact:
@@ -26,6 +26,6 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const fact = `Did you know? Here's a cat fact for you: "${{ steps.fact.outputs.fact }}" ;
+            const fact = `Did you know? Here's a cat fact for you: "${{ steps.fact.outputs.fact }}" ' ;
             const comment = { issue_number: context.issue.number, body: fact };
             return github.issues.createComment({ ...context.repo, ...comment });
