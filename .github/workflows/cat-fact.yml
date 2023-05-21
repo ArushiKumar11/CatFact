@@ -3,10 +3,14 @@ name: Cat Facts
 on:
   issues:
     types: [opened]
+    
+permissions: read-all|write-all    
 
 jobs:
   cat_fact:
     runs-on: ubuntu-latest
+
+
 
     steps:
       - name: Checkout code
