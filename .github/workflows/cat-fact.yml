@@ -26,6 +26,11 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const fact = `Did you know? Here's a cat fact for you: "${{ steps.fact.outputs.fact }}" ' ;
-            const comment = { issue_number: context.issue.number, body: fact };
-            return github.issues.createComment({ ...context.repo, ...comment });
+            const fact = `Did you know? Here's a cat fact for you: "${{ steps.fact.outputs.fact }}" ';
+            const github = require('@actions/github');
+            const octokit = github.getOctokit(process.env.PAT);
+            const { owner, repo } = github.context.repo;
+            const comment = { owner, repo, issue_number: github.context.issue.number, body: fact };
+            return octokit.rest.issues.createComment(comment);
+          env:
+            PAT: ${{ secrets.PAT }}
